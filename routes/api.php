@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BorrowController;
+use App\Http\Controllers\WishController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,8 @@ Route::group([
 ], function () {
     Route::get('index', [BookController::class, 'index']);
     Route::get('show/{id}', [BookController::class, 'show']);
+    Route::get('search', [BookController::class, 'search']);
+    Route::get('category/{id}', [BookController::class, 'category']);
 
     Route::group([
         'middleware' => 'auth:api'
@@ -57,6 +60,7 @@ Route::group([
 ], function () {
     Route::get('index', [BorrowController::class, 'index']);
     Route::get('show/{id}', [BorrowController::class, 'show']);
+    Route::get('show/user/{id}', [BorrowController::class, 'byuser']);
 
     Route::group([
         'middleware' => 'auth:api'
@@ -64,5 +68,21 @@ Route::group([
         Route::post('store', [BorrowController::class, 'store']);
         Route::put('update/{id}', [BorrowController::class, 'update']);
         Route::delete('delete/{id}', [BorrowController::class, 'destroy']);
+    });
+});
+
+Route::group([
+    'prefix' => 'wish'
+], function () {
+    Route::get('index', [WishController::class, 'index']);
+    Route::get('show/{id}', [WishController::class, 'show']);
+    Route::get('show/user/{id}', [WishController::class, 'byuser']);
+
+    Route::group([
+        'middleware' => 'auth:api'
+    ], function () {
+        Route::post('store', [WishController::class, 'store']);
+        Route::put('update/{id}', [WishController::class, 'update']);
+        Route::delete('delete/{id}', [WishController::class, 'destroy']);
     });
 });

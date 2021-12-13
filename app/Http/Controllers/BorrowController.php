@@ -17,9 +17,9 @@ class BorrowController extends BaseController
      */
     public function index()
     {
-        $borrow = Borrow::all();
+        $borrow = Borrow::paginate(10);
 
-        return $this->sendResponse(BorrowResource::collection($borrow), 'Borrow retrieved successfully.');
+        return $this->sendResponse(new BorrowResource($borrow), 'Borrow retrieved successfully.');
     }
 
     /**
@@ -30,7 +30,24 @@ class BorrowController extends BaseController
      */
     public function show($id)
     {
-        $borrow = Borrow::find($id);
+        $borrow = Borrow::find($id)->paginate(10);
+
+        if (is_null($borrow)) {
+            return $this->sendError('User not found.');
+        }
+
+        return $this->sendResponse(new BorrowResource($borrow), 'Borrow retrieved successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function byuser($id)
+    {
+        $borrow = Borrow::where('user_id', $id)->paginate(10);
 
         if (is_null($borrow)) {
             return $this->sendError('User not found.');

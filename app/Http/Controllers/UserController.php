@@ -17,9 +17,9 @@ class UserController extends BaseController
      */
     public function index()
     {
-        $user = User::all();
+        $user = User::paginate(10);
 
-        return $this->sendResponse(UserResource::collection($user), 'User retrieved successfully.');
+        return $this->sendResponse(new UserResource($user), 'User retrieved successfully.');
     }
 
     /**
@@ -30,7 +30,7 @@ class UserController extends BaseController
      */
     public function show($id)
     {
-        $user = User::find($id);
+        $user = User::find($id)->paginate(10);
 
         if (is_null($user)) {
             return $this->sendError('User not found.');
@@ -65,7 +65,9 @@ class UserController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('KKOkeJoss')->accessToken;
+        $success['id'] =  $user->id;
         $success['name'] =  $user->name;
+        $success['id_role'] =  $user->id_role;
 
         return $this->sendResponse($success, 'User register successfully.');
     }
@@ -80,6 +82,7 @@ class UserController extends BaseController
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $success['token'] =  $user->createToken('KKOkeJoss')->accessToken;
+            $success['id'] =  $user->id;
             $success['name'] =  $user->name;
             $success['id_role'] =  $user->id_role;
 

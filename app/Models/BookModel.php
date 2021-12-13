@@ -27,4 +27,9 @@ class BookModel extends Model
     {
         return $this->hasMany(BorrowModel::class);
     }
+
+    public function wish()
+    {
+        return $this->hasMany(WishModel::class);
+    }
 }

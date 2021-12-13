@@ -44,5 +44,10 @@ class UserModel extends Authenticatable
     {
         return $this->hasMany(BorrowModel::class);
     }
+
+    public function wish()
+    {
+        return $this->hasMany(WishModel::class);
+    }
     
 }

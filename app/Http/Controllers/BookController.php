@@ -19,9 +19,9 @@ class BookController extends BaseController
      */
     public function index()
     {
-        $book = Book::all();
+        $book = Book::paginate(10);
 
-        return $this->sendResponse(BookResource::collection($book), 'Books retrieved successfully.');
+        return $this->sendResponse(new BookResource($book), 'Books retrieved successfully.');
     }
 
     /**
@@ -32,13 +32,43 @@ class BookController extends BaseController
      */
     public function show($id)
     {
-        $book = Book::find($id);
+        $book = Book::find($id)->paginate(10);
 
         if (is_null($book)) {
             return $this->sendError('User not found.');
         }
 
         return $this->sendResponse(new BookResource($book), 'Books retrieved successfully.');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $input = $request->all();
+        $book = Book::query()->where('judul', 'LIKE', "%{$input['q']}%")->paginate(10);
+
+        return $this->sendResponse(new BookResource($book), 'Book retrieved successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function category($id)
+    {
+        $book = Book::where('kategori', $id)->paginate(10);
+
+        if (is_null($book)) {
+            return $this->sendError('Book not found.');
+        }
+
+        return $this->sendResponse(new BookResource($book), 'Book retrieved successfully.');
     }
 
     /**
@@ -52,7 +82,7 @@ class BookController extends BaseController
             'isbn' => 'required|max:50',
             'judul' => 'required',
             'author' => 'required|max:20',
-            'foto_buku' => 'required|mimes:jpeg,png,jpg|max:2048',
+            'foto_buku' => 'required',
             'tahun_terbit' => 'required|numeric',
             'penerbit' => 'required',
             'kategori' => 'required',
@@ -65,10 +95,6 @@ class BookController extends BaseController
         }
 
         $input = $request->all();
-        // Image
-        $imageName = time() . '.' . $request->foto_buku->extension();
-        $request->foto_buku->move(public_path('images/picture/'), $imageName);
-        $input['foto_buku'] = 'images/picture/' .$imageName;
         $book = Book::create($input);
 
         return $this->sendResponse(new BookResource($book), 'Add book succesfull');
