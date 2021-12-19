@@ -18,7 +18,7 @@ class WishController extends BaseController
      */
     public function index()
     {
-        $wish = Wish::paginate(10);
+        $wish = Wish::with('books','users')->paginate(10);
 
         return $this->sendResponse(new WishResource($wish), 'Wish retrieved successfully.');
     }
@@ -31,13 +31,30 @@ class WishController extends BaseController
      */
     public function show($id)
     {
-        $wish = Wish::find($id)->paginate(10);
+        $wish = Wish::find($id)->with('books','users')->paginate(10);
 
         if (is_null($wish)) {
             return $this->sendError('User not found.');
         }
 
         return $this->sendResponse(new WishResource($wish), 'Wish retrieved successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function byuser($id)
+    {
+        $wish = Wish::where('user_id', $id)->with('books','users')->get();
+
+        if (is_null($wish)) {
+            return $this->sendError('User not found.');
+        }
+
+        return $this->sendResponse(new WishResource($wish), 'Borrow retrieved successfully.');
     }
 
     /**
@@ -62,22 +79,6 @@ class WishController extends BaseController
         return $this->sendResponse(new WishResource($wish), 'Add wish succesfull');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function byuser($id)
-    {
-        $wish = Wish::where('user_id', $id)->get();
-
-        if (is_null($wish)) {
-            return $this->sendError('User not found.');
-        }
-
-        return $this->sendResponse(new WishResource($wish), 'Borrow retrieved successfully.');
-    }
 
     /**
      * Update the specified resource in storage.
