@@ -31,7 +31,7 @@ class WishController extends BaseController
      */
     public function show($id)
     {
-        $wish = Wish::where('id', $id)->with('books','users')->paginate(10);
+        $wish = Wish::find($id);
 
         if (is_null($wish)) {
             return $this->sendError('User not found.');

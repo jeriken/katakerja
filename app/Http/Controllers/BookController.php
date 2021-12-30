@@ -32,7 +32,7 @@ class BookController extends BaseController
      */
     public function show($id)
     {
-        $book = Book::where('id', $id)->paginate(10);
+        $book = Book::find($id);
 
         if (is_null($book)) {
             return $this->sendError('Book not found.');

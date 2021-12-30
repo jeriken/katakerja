@@ -30,7 +30,7 @@ class BorrowController extends BaseController
      */
     public function show($id)
     {
-        $borrow = Borrow::where('id', $id)->with('books','users')->paginate(10);
+        $borrow = Borrow::find($id);
 
         if (is_null($borrow)) {
             return $this->sendError('User not found.');
