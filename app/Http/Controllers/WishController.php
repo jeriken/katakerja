@@ -46,6 +46,13 @@ class WishController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function byuser($id)
     {
         $wish = Wish::where('user_id', $id)->with('books','users')->get();

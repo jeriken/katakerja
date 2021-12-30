@@ -38,6 +38,24 @@ class UserController extends BaseController
 
         return $this->sendResponse(new UserResource($user), 'User retrieved successfully.');
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function email($id)
+    {
+        $user = User::where('email',$id)->paginate(10);
+
+        if (is_null($user)) {
+            return $this->sendError('User not found.');
+        }
+
+        return $this->sendResponse(new UserResource($user), 'User retrieved successfully.');
+    }
+
     /**
      * Register api
      *

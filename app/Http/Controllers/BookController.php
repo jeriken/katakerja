@@ -35,10 +35,27 @@ class BookController extends BaseController
         $book = Book::find($id)->paginate(10);
 
         if (is_null($book)) {
-            return $this->sendError('User not found.');
+            return $this->sendError('Book not found.');
         }
 
         return $this->sendResponse(new BookResource($book), 'Books retrieved successfully.');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function isbn($id)
+    {
+        $book = Book::where('isbn',$id)->paginate(10);
+
+        if (is_null($book)) {
+            return $this->sendError('Book not found.');
+        }
+
+        return $this->sendResponse(new BookResource($book), 'Book retrieved successfully.');
     }
 
     /**

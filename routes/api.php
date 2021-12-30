@@ -33,6 +33,7 @@ Route::group([
         'middleware' => 'auth:api'
     ], function () {
         Route::get('show/{id}', [UserController::class, 'show']);
+        Route::get('email/{id}', [UserController::class, 'email']);
         Route::get('index', [UserController::class, 'index']);
         Route::put('update/{id}', [UserController::class, 'update']);
     });
@@ -49,6 +50,7 @@ Route::group([
     Route::group([
         'middleware' => 'auth:api'
     ], function () {
+        Route::get('isbn/{id}', [BookController::class, 'isbn']);
         Route::post('store', [BookController::class, 'store']);
         Route::post('update/{id}', [BookController::class, 'update']);
         Route::delete('delete/{id}', [BookController::class, 'destroy']);
