@@ -30,7 +30,7 @@ class UserController extends BaseController
      */
     public function show($id)
     {
-        $user = User::find($id)->paginate(10);
+        $user = User::where('id', $id)->paginate(10);
 
         if (is_null($user)) {
             return $this->sendError('User not found.');

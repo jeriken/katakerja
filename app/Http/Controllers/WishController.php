@@ -31,7 +31,7 @@ class WishController extends BaseController
      */
     public function show($id)
     {
-        $wish = Wish::find($id)->with('books','users')->paginate(10);
+        $wish = Wish::where('id', $id)->with('books','users')->paginate(10);
 
         if (is_null($wish)) {
             return $this->sendError('User not found.');
@@ -39,13 +39,6 @@ class WishController extends BaseController
 
         return $this->sendResponse(new WishResource($wish), 'Wish retrieved successfully.');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
 
     /**
      * Display the specified resource.
